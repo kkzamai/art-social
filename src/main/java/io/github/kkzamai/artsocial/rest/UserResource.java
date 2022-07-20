@@ -1,7 +1,11 @@
 package io.github.kkzamai.artsocial.rest;
 
+import java.util.Set;
+
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -16,6 +20,7 @@ import javax.ws.rs.core.Response;
 import io.github.kkzamai.artsocial.model.User;
 import io.github.kkzamai.artsocial.repository.UserRepository;
 import io.github.kkzamai.artsocial.rest.dto.CreateUserRequest;
+import io.github.kkzamai.artsocial.rest.dto.ResponseError;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 
 @Path("/users")
@@ -24,15 +29,23 @@ import io.quarkus.hibernate.orm.panache.PanacheQuery;
 public class UserResource {
 
 	UserRepository repository;
+	Validator validator;
 
 	@Inject
-	public UserResource(UserRepository repository){
+	public UserResource(UserRepository repository, Validator validator){
 		this.repository = repository;
+		this.validator = validator;
 	}
 
 	@POST
 	@Transactional
 	public Response createUser(CreateUserRequest userRequest){
+
+		Set<ConstraintViolation<CreateUserRequest>> violations = validator.validate(userRequest);
+		if(!violations.isEmpty()){			
+			ResponseError responseError = ResponseError.createFromValidation(violations);
+			Response.status(400).entity(responseError).build();
+		}
 
 		User user = new User();
 		user.setAge(userRequest.getAge());
