@@ -17,8 +17,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import io.github.kkzamai.artsocial.model.User;
-import io.github.kkzamai.artsocial.repository.UserRepository;
+import io.github.kkzamai.artsocial.domain.model.User;
+import io.github.kkzamai.artsocial.domain.repository.UserRepository;
 import io.github.kkzamai.artsocial.rest.dto.CreateUserRequest;
 import io.github.kkzamai.artsocial.rest.dto.ResponseError;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
