@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Table(name = "POSTS")
+@Table(name = "FOLLOWERS")
 @Data
 public class Follower {
 	
@@ -24,6 +24,6 @@ public class Follower {
 	private User user;
 
 	@ManyToOne
-	@JoinColumn(name = "userid")
+	@JoinColumn(name = "follower_id")
 	private User follower;
 }
